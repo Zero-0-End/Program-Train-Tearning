@@ -4,11 +4,16 @@ public class Player {
     private String name;
     private List<Card> handCard;
 
-    public Card drawCard(){
-        return null;
+    public void drawCard(){
+        ;
     }
 
     public void playCar(){
 
+    }
+
+
+    public Player(String name){
+        this.name = name;
     }
 }
