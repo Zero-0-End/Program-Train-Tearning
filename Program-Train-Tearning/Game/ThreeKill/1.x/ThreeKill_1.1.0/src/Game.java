@@ -41,7 +41,9 @@ public class Game {
 
             //玩家顺序轮流
             Player source = players.get(index);
-            Player target = players.get((index+1)%players.size());
+            Player target = source.findTarget(players);
+
+
             index = (index+1)%players.size();
 
             System.out.println("-------第 "+round+" 回合-------");

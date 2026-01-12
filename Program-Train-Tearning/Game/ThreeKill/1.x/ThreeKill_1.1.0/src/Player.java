@@ -51,6 +51,20 @@ public class Player {
 
     }
 
+
+    //寻找目标
+    public Player findTarget(List<Player> players){
+        Player taregt = new Player("",0);
+        for (Player player : players){
+            if (player != this && player.getAlive()){
+                if (player.getHandCardSize() > taregt.getHandCardSize()){
+                    taregt = player;
+                }
+            }
+        }
+        return taregt;
+    }
+
     //响应
     //被动出闪
     public boolean dodge(Deck deck){
