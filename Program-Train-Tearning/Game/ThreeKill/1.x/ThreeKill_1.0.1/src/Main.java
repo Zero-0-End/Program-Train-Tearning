@@ -28,6 +28,7 @@ public class Main {
         Player p4 = new Player("关羽"); players.add(p4);
 
         //创建新游戏
+
         Game game = new Game(players,deck);
         game.gameStart();
     }
