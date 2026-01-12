@@ -1,40 +1,78 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Player {
     private String name;
     private List<Card> handCard = new ArrayList<>();
     private int health;
-    private boolean isDanger;//濒死状态
-    private boolean isDrunk;
-    private boolean isAlive;
+    private boolean isDanger=false;//濒死状态
+    private boolean isDrunk=false;
+    private boolean isAlive=true;
 
     public void drawCard(Card card){
         this.handCard.add(card);
         System.out.println(this.name+"摸到了 "+card.getName());
     }
 
-    //手牌非空时，总是打出手中第一张牌
-    public void playCard(Player source, Player target){
-        if (!this.handCard.isEmpty()){
-            Card card = this.handCard.remove(0);
-            System.out.println(source.name+" 对 "+target.name+" 使用: "+card.getName());
-            card.use(source,target);
-        }else{
-            System.out.println("手中无牌");
+    //出牌
+    //杀的目标是另一个玩家,酒和桃的目标是自己
+    //不能主动出闪
+    public void playCard(Player source, Player target, Deck deck){
+        if (!this.isAlive){
+            System.out.println(this.name+" 已阵亡，无法出牌");
+            return;
+        }else {
+            if (!this.handCard.isEmpty()){
+                //遍历手牌打出非闪牌
+                Iterator<Card> iterator = this.handCard.iterator();
+                while (iterator.hasNext()){
+                    Card card =iterator.next();
+                    if (!card.getName().equals("闪")){
+                        if (card.getName().equals("杀")){
+                            System.out.println(source.name+" 对 "+target.name+" 使用: "+card.getName());
+                        } else if (card.getName().equals("桃")){
+                            System.out.println(source.name+" 使用: "+card.getName());
+                        }else if (card.getName().equals("酒")){
+                            System.out.println(source.name+" 使用: "+card.getName());
+                        }
+                        else if (!card.getName().equals("闪")){
+                            System.out.println(source.name+" 使用未知定义牌: "+card.getName());
+                        }
+
+                        card.use(source,target,deck);
+                        iterator.remove();
+                    }
+                }
+            }else{
+                System.out.println("手中无可用牌");
+            }
         }
+
     }
 
-
-    public boolean dodge(){
+    //响应
+    //被动出闪
+    public boolean dodge(Deck deck){
         for (Card card : handCard){
             if (card.getName().equals("闪")){
                 handCard.remove(card);
                 System.out.println(this.name+" 使用闪抵消"+" '杀'");
+                deck.addDiscardPile(card);
                 return true;
             }
         }
         return false;
+    }
+
+
+    //弃牌
+    public void disCard(Deck deck){
+        while(handCard.size()>this.health && !handCard.isEmpty()){
+            Card card = handCard.remove(0);
+            System.out.println(this.name+" 弃掉了 "+card.getName());
+            deck.addDiscardPile(card);
+        }
     }
 
     public void loseHealth(int damage){
@@ -47,17 +85,54 @@ public class Player {
         System.out.println(this.name+" 回复体力，当前体力为： "+this.health);
     }
 
-    public void rescue(Player source, Player target){
-        System.out.println(source.getName()+"对"+target.getName()+"进行救援");
-
+    public boolean rescue(Deck deck){
+        for (Card card : handCard){
+            if (card.getName().equals("桃") || card.getName().equals("酒")){
+                card.use(this,this,deck);
+                System.out.println(this.getName()+"进行救援");
+                return true;
+            }
+        }
+        this.setAlive(false);
+        return false;
     }
+
+
     public Player(String name, int health) {
         this.health = health;
         this.name = name;
-
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public void setDrunk(boolean drunk) {
+        isDrunk = drunk;
+    }
+
+    public void setDanger(boolean danger) {
+        isDanger = danger;
+    }
+
+
+
+    public boolean getDrunk(){
+        return this.isDrunk;
+    }
+
+    public boolean getAlive(){
+        return this.isAlive;
+    }
+    public int getHealth(){
+        return this.health;
+    }
+
+    public int getHandCardSize(){
+        return this.handCard.size();
     }
 }
