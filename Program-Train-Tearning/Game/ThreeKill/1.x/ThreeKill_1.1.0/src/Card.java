@@ -20,7 +20,7 @@ public class Card {
             case "酒":
                 source.setDrunk(true);
                 source.heal(1);
-
+                break;
             default:
                 System.out.println("未知卡牌效果.");
         }
