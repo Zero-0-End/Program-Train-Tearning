@@ -10,7 +10,7 @@ public class Card {
                 target.heal(1);
                 break;
             default:
-                System.out.println(source.getName()+" 对 "+target.getName()+" 使用 "+this.name);
+                System.out.println("未知卡牌效果.");
         }
     }
 

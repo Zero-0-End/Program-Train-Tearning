@@ -22,7 +22,7 @@ public class Game {
             //发牌、摸牌、出牌
             Card card = this.deck.deal();
             source.drawCard(card);
-            source.playCar(source,target);
+            source.playCard(source,target);
         }
         System.out.println("游戏结束！");
     }
