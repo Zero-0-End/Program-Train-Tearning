@@ -9,7 +9,7 @@ public class Game {
     }
 
     //按照输入的回合数进行游戏
-    public void gameStart(int rounds){
+    public void gameStart(){
         System.out.println("-------游戏开始！-------");
 
 
@@ -24,20 +24,22 @@ public class Game {
             }
         }
 
-        int round = 0;
-        int index = 0;//玩家索引
-        while ( round < rounds){
+        int index = 0;
+        int round = 1;
+        while ( true){
+
             int alive = 0;
             for (Player player:players){
                 if (player.getAlive()){
                     alive++;
                 }
             }
+            System.out.println("存活"+alive+"名玩家。");
             //仅剩一名玩家结束游戏
             if (alive<=1){
                 break;
             }
-            round++;
+
 
             //玩家顺序轮流
             Player source = players.get(index);
@@ -47,8 +49,13 @@ public class Game {
             index = (index+1)%players.size();
 
             System.out.println("-------第 "+round+" 回合-------");
+            round++;
             System.out.println("当前玩家: "+source.getName());
             //发牌、摸牌、出牌、弃牌
+            if (!source.getAlive()){
+                System.out.println(source.getName()+"已死亡,下一个玩家行动.");
+                continue;
+            }
             for (int i=0;i<2;i++){
                 if (this.deck.isEmpty()){
                     this.deck.reshuffle();
@@ -61,18 +68,31 @@ public class Game {
             source.disCard(deck);
             System.out.println(source.getName()+" 生命="+source.getHealth()+" 手牌="+source.getHandCardSize());
 
-            if (target.getHealth() ==0) {
+            if (target.getHealth() <=0) {
                 target.setDanger(true);
                 System.out.println(target.getName()+"进入濒死状态；");
                 if (target.rescue(deck)) {
                     System.out.println(target.getName() + " 被救活了！");
                 } else {
                     System.out.println(target.getName() + " 阵亡了！");
-                    players.remove(target);
+                    target.setAlive(false);
                 }
             }
 
+            System.out.println(players.get(0).getName()+players.get(0).getAlive());
+            System.out.println(players.get(1).getName()+players.get(1).getAlive());
+            System.out.println(players.get(2).getName()+players.get(2).getAlive());
+            System.out.println(players.get(3).getName()+players.get(3).getAlive());
+
         }
-        System.out.println("游戏结束！"+players.get(0).getName()+" 获胜！");
+
+        int winnerIndex = -1;
+        for (Player player:players
+             ) {
+            if (player.getAlive()){
+                winnerIndex = players.indexOf(player);
+            }
+        }
+        System.out.println("游戏结束！"+players.get(winnerIndex).getName()+" 获胜！");
     }
 }

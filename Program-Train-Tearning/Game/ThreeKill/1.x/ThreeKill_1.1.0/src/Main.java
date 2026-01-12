@@ -14,9 +14,9 @@ public class Main {
         //生成20张牌加入牌堆
         for(int i=0;i<20;i++){
             int num = rand.nextInt(100);//生成 0-99 的随机整数
-            if (num<30){
+            if (num<60){
                 deck.addCard(new Card("杀"));
-            }else if (num<60){
+            }else if (num<70){
                 deck.addCard(new Card("闪"));
             } else if (num<80) {
                 deck.addCard(new Card("桃"));
@@ -33,6 +33,6 @@ public class Main {
 
         //创建新游戏
         Game game = new Game(players,deck);
-        game.gameStart(3);
+        game.gameStart();
     }
 }
