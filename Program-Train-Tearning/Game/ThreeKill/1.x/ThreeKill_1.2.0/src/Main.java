@@ -5,15 +5,19 @@ import java.util.Random;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
+
+        //生成玩家
         Player p1 = new Player("曹操",4);
         Player p2 = new Player("刘备",4);
         Player p3 = new Player("孙权",4);
         Player p4 = new Player("关羽",4);
 
+        //生成牌堆
         Deck deck = new Deck();
 
-        Random random = new Random();
+        //随机生成一些牌加入牌堆
         for (int i=0;i<20;i++){
+            Random random = new Random();
             if (random.nextInt(100)<60){
                 deck.addDrawPile(new ShaCard());
             } else if (random.nextInt(100)<70) {
