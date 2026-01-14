@@ -85,7 +85,7 @@ public class Player {
     }
 
     //弃牌
-    public void diaCard(Card card){
+    public void disCard(Card card){
         this.handCards.remove(card);
     }
 
